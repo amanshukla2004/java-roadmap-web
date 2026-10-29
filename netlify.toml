@@ -1,0 +1,19 @@
+# Netlify: deploys the 3-playlist version. For all 5 playlists use "npm run build" / "dist".
+[build]
+  command = "npm run build:lite"
+  publish = "dist-lite"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    X-Frame-Options = "DENY"

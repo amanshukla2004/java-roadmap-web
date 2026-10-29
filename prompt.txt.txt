@@ -1,0 +1,63 @@
+Build a Java learning progress tracker website from the Excel file `Java_Roadmap_5_Playlists.xlsx` in this folder.
+
+## Stack
+- React + Vite + TypeScript, Tailwind CSS
+- No backend. Progress is saved in localStorage.
+- Must run with `npm install && npm run dev`
+
+## Step 1: Convert the Excel to JSON (do this first)
+Write a one-time Python script (openpyxl) that outputs `src/data/roadmap.json`. Don't hardcode any topics by hand.
+
+The workbook has 4 sheets:
+- **Roadmap**: header on row 3, data from row 4. Columns: A=#, B=Phase, C=Topic, D=What to cover, E=Priority ("★ Critical" / "Important" / "Good to know"), F=count of playlists covering (formula, ignore it and recompute), G-K=playlists A-E, L=Gap/search note, M=Status (ignore).
+- **Playlist Index**: every video in all 5 playlists. Columns: A=Key (A-E), B=Playlist, C=position, D=title (hyperlinked to the video), E=duration, F=minutes, G=Roadmap # (comma-separated topic IDs the video belongs to), H=topic names.
+- **Gaps - To Search**: topics no playlist covers.
+- **Summary**: ignore.
+
+Playlist names come from the row-3 headers of columns G-K, and each header cell has a hyperlink to the playlist.
+
+Build each topic's video list from the Playlist Index sheet (use column G to match videos to topics). That way every topic gets ALL its videos with individual links, not just the first one. Read hyperlinks via `cell.hyperlink.target`.
+
+Output shape:
+- playlists: [{key, channel, name, url, videoCount}]
+- topics: [{id, phase, topic, subtopics, priority, gapNote, videos: {A:[{pos,title,duration,minutes,url}], B:[], ...}}]
+
+Verify in the script: 141 topics, 472 videos, and every video appears in at least one topic.
+
+## Step 2: The website
+**Layout**
+- Top: overall progress bar (topics done / 141), Critical-topics progress bar, and hours of video watched / total.
+- Left sidebar: phases (1 to 14), each with its own progress bar. Click one to jump to it.
+- Main area: topic cards grouped by phase.
+
+**Topic card**
+- Topic name, "what to cover" text, priority badge (★ Critical = amber, Important = pale yellow, Good to know = grey).
+- Status dropdown: Not started / In progress / Done.
+- Videos shown in 5 columns or tabs (one per playlist). Each video has a watched checkbox, a link opening YouTube in a new tab, and its duration.
+- If a topic is Done, auto-check nothing. Keep video checkboxes and topic status independent.
+- If no playlist covers the topic, show a red "Not covered" banner with the gap note and a "Search YouTube" button (`https://www.youtube.com/results?search_query=` plus the search terms from the note).
+- Partial-coverage notes (gapNote starting with "Partial") show as a yellow warning.
+
+**Filters and search**
+- Search by topic or subtopic text.
+- Filter by priority, phase, status, playlist, and "gaps only".
+- A "Critical only" quick toggle.
+- Filters combine with AND.
+
+**Other**
+- Playlist stats page or panel: per playlist, videos, total hours, watched hours, topics covered.
+- Export progress as JSON and import it back (so I can back up or move between devices).
+- Reset button with a confirm dialog.
+- Dark mode toggle, remembered.
+- Responsive; works on mobile.
+- Keyboard-friendly (focus states, labels on controls).
+
+## Persistence
+Store only my progress in localStorage under one key: `{ topicStatus: {topicId: status}, watched: {"A-33": true, ...} }`. Never store the roadmap data there. If roadmap.json changes later, my progress must still load.
+
+## Code quality
+- Small components, typed props, a `useProgress` hook for all localStorage logic.
+- No unused dependencies. No placeholder or fake data.
+- Add a README with how to run it and how to re-generate roadmap.json.
+
+When done, run the dev server and the build and fix any errors. Then list exactly what you built and anything you skipped.

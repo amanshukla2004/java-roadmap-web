@@ -1,0 +1,33 @@
+{
+  "name": "java-roadmap-tracker",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "dev:lite": "vite --mode lite --port 5174",
+    "build": "tsc -b && vite build",
+    "build:lite": "tsc -b && vite build --mode lite --outDir dist-lite",
+    "preview": "vite preview",
+    "preview:lite": "vite preview --outDir dist-lite --port 4174",
+    "convert": "python scripts/convert_roadmap.py",
+    "typecheck": "tsc -b"
+  },
+  "dependencies": {
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.5"
+  },
+  "description": "Track progress through a 141-topic Core Java roadmap mapped to YouTube playlists.",
+  "engines": {
+    "node": "^20.19.0 || >=22.12.0"
+  }
+}

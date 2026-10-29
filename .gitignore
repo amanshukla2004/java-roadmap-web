@@ -1,0 +1,36 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+dist-lite/
+*.tsbuildinfo
+
+# Local env overrides (.env and .env.lite hold no secrets and ARE committed)
+.env.local
+.env.*.local
+
+# Logs
+*.log
+npm-debug.log*
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+
+# Excel lock files (created while the workbook is open)
+~$*.xlsx
+
+# Deploy tool state
+.vercel/
+.netlify/
+
+# Editors / OS
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+desktop.ini
